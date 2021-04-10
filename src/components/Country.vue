@@ -10,8 +10,9 @@
         @row-clicked="openModal"
     >
     </b-table>
-    <b-modal v-model="isModalOpen" title="BootstrapVue">
-      {{ selectedCountry.name }}
+    <b-modal v-model="isModalOpen" v-bind:title="selectedCountry.name">
+      {{ selectedCountry.name }} <br>
+      {{ }}
     </b-modal>
   </div>
 </template>
