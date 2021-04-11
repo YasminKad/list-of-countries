@@ -1,18 +1,24 @@
 <template>
   <div>
-    <b-input
-        v-model="targetCountry"
-    />
+    <b-input v-model="targetCountry"/>
     <b-btn id="search-btn" @click="findCountry"> search!</b-btn>
     <b-table
         striped hover
-        :items="countryList"
         @row-clicked="openModal"
+        :fields="tableFields"
+        :items="countryList"
     >
+    <template #cell(flag)="{ item }">
+      <img v-bind:src="item.flag" v-bind:alt="item.name">
+    </template>
     </b-table>
     <b-modal v-model="isModalOpen" v-bind:title="selectedCountry.name">
-      {{ selectedCountry.name }} <br>
-      {{ }}
+      <ul>
+        <img id="flag-in-the-cell" v-bind:src="selectedCountry.flag" alt="flag picture">
+        <li v-for="field in cellFields" :key="field">
+          {{ field }} : {{ selectedCountry[field] }}
+        </li>
+      </ul>
     </b-modal>
   </div>
 </template>
@@ -33,6 +39,8 @@ export default {
   },
   data: function () {
     return {
+      tableFields: ['name', 'flag'],
+      cellFields: ['name', 'capital', 'region', 'subregion', 'population', 'nativeName'],
       countryList: [],
       isModalOpen: false,
       selectedCountry: "",
@@ -49,10 +57,7 @@ export default {
     }
   }
 }
-
-
 </script>
-
 <style scoped>
 
 </style>

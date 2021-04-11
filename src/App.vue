@@ -6,7 +6,6 @@
 
 <script>
 import Country from "@/components/Country";
-
 export default {
   name: 'App',
   components: {
