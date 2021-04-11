@@ -5,12 +5,12 @@
     <b-table
         striped hover
         @row-clicked="openModal"
-        :fields="tableFields"
-        :items="countryList"
+        v-bind:fields="tableFields"
+        v-bind:items="filteredCountryList"
     >
-    <template #cell(flag)="{ item }">
-      <img v-bind:src="item.flag" v-bind:alt="item.name">
-    </template>
+      <template #cell(flag)="{ item }">
+        <img v-bind:src="item.flag" v-bind:alt="item.name">
+      </template>
     </b-table>
     <b-modal v-model="isModalOpen" v-bind:title="selectedCountry.name">
       <ul>
@@ -31,17 +31,27 @@ export default {
   created() {
     axios.get('https://restcountries.eu/rest/v2/all')
         .then((response) => {
-          this.countryList = response.data
+          // this.countryList = response.data
+          this.backUpCountryList = response.data
         })
         .catch(function (error) {
           console.error(error);
         })
   },
+  computed: {
+    filteredCountryList: function () {
+      let input = this.targetCountry
+      return this.backUpCountryList.filter((country) => {
+        return !!country.name.includes(input);
+      })
+    }
+  },
   data: function () {
     return {
       tableFields: ['name', 'flag'],
       cellFields: ['name', 'capital', 'region', 'subregion', 'population', 'nativeName'],
-      countryList: [],
+      // countryList: [],
+      backUpCountryList: [],
       isModalOpen: false,
       selectedCountry: "",
       targetCountry: "",
@@ -52,9 +62,17 @@ export default {
       this.isModalOpen = true
       this.selectedCountry = country
     },
-    findCountry() {
-      // console.log( this.countryList.filter( input => { input === this.country.name}))
-    }
+    // findCountry(input) {
+    //   input = this.targetCountry
+    //   let possibleCountries = []
+    //   this.countryList.forEach( country => {
+    //     if( country.name === input) {
+    //       possibleCountries.push(country)
+    //     }
+    //     possibleCountries = this.countryList
+    //     console.log(possibleCountries)
+    //   })
+    // }
   }
 }
 </script>
